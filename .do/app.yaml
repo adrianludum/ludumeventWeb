@@ -1,0 +1,39 @@
+# Digital Ocean App Platform spec for ludumevents.com
+# https://docs.digitalocean.com/products/app-platform/reference/app-spec/
+#
+# This file is read by `doctl apps create --spec .do/app.yaml`
+# or surfaced automatically in the Apps UI when this repo is connected.
+
+name: ludumevents-marketing
+region: lon  # London — change to fra1, ams3, nyc3 etc. for a different DC
+
+static_sites:
+  - name: web
+    github:
+      repo: adrianludum/ludumeventWeb
+      branch: main
+      deploy_on_push: true
+
+    source_dir: /
+    output_dir: /
+    index_document: index.html
+
+    # SPA-style fallback: any unknown path serves index.html.
+    # The page has anchor links (#how, #pillars, etc.) so this is
+    # the safest default until we add a real 404.
+    catchall_document: index.html
+
+    routes:
+      - path: /
+
+    # Domains are intentionally NOT declared here. Add them in the
+    # Apps → Settings → Domains UI after the first deploy succeeds,
+    # so DO can show you the exact DNS records to add at your
+    # registrar before the cert is issued.
+    #
+    # When stable, you can codify them like:
+    # domains:
+    #   - domain: ludumevents.com
+    #     type: PRIMARY
+    #   - domain: www.ludumevents.com
+    #     type: ALIAS
