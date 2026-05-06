@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ludum Events — The operating system for your rowing regatta.</title>
+<meta name="description" content="From the online entry system to the awards programme: entries, communications, dashboards, volunteers and the whole print pack in one place. Built for the people running small and large events.">
+<meta property="og:title" content="Ludum Events — The operating system for your rowing regatta.">
+<meta property="og:description" content="Entries, comms, dashboards, volunteers and the print pack — in one place. Free until 31 August 2026.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0A0A0B">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:           #0A0A0B;
+    --bg-elev:      #131316;
+    --bg-elev-2:    #1A1A1F;
+    --bg-elev-3:    #22222A;
+    --border:       rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.16);
+    --text:         #F5F2ED;
+    --text-muted:   rgba(245,242,237,0.62);
+    --text-subtle:  rgba(245,242,237,0.38);
+    --red:          #FF4538;
+    --red-bright:   #FF5C50;
+    --red-soft:     rgba(255,69,56,0.14);
+    --mint:         #6FE3C9;
+    --mint-soft:    rgba(111,227,201,0.14);
+    --radius-sm:    6px;
+    --radius:       12px;
+    --radius-lg:    18px;
+    --shadow-sm:    0 1px 0 rgba(255,255,255,0.04) inset;
+    --shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -24px rgba(0,0,0,0.6);
+    --max:          1200px;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  body {
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    line-height:1.5;
+    font-size:16px;
+    font-feature-settings:"ss01","cv11";
+  }
+  ::selection { background:var(--red); color:#fff; }
+
+  .skip { position:absolute; left:-9999px; top:0; padding:8px 12px; background:var(--red); color:#fff; z-index:1000; }
+  .skip:focus { left:12px; top:12px; }
+
+  :focus-visible { outline:2px solid var(--red-bright); outline-offset:3px; border-radius:4px; }
+
+  .wrap { max-width:var(--max); margin:0 auto; padding:0 24px; }
+  @media (min-width:900px) { .wrap { padding:0 40px; } }
+
+  .display { font-family:'Inter Tight',sans-serif; font-weight:800; letter-spacing:-0.035em; line-height:0.96; }
+  .eyebrow {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    color:var(--red);
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    font-weight:500;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before { content:''; width:18px; height:1px; background:currentColor; opacity:0.6; }
+  .lead { font-size:1.0625rem; color:var(--text-muted); line-height:1.65; max-width:54ch; }
+
+  /* ─────────── NAV ─────────── */
+  header.nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(10,10,11,0.72);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner {
+    height:64px;
+    max-width:var(--max);
+    margin:0 auto;
+    padding:0 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px;
+  }
+  @media (min-width:900px) { .nav-inner { padding:0 40px; height:72px; } }
+  .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
+  .brand-mark { height:28px; width:auto; display:block; }
+  .brand-text { font-family:'Inter Tight',sans-serif; font-size:1rem; font-weight:700; letter-spacing:-0.01em; }
+  .brand-text span { color:var(--text-subtle); font-weight:500; }
+
+  .nav-links { display:none; gap:8px; }
+  @media (min-width:900px) { .nav-links { display:flex; } }
+  .nav-links a {
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:0.875rem;
+    font-weight:500;
+    padding:8px 12px;
+    border-radius:6px;
+    transition:color .15s, background .15s;
+  }
+  .nav-links a:hover { color:var(--text); background:var(--bg-elev); }
+
+  .nav-actions { display:flex; align-items:center; gap:6px; }
+  .nav-signin {
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:0.875rem;
+    font-weight:500;
+    padding:8px 14px;
+    border-radius:8px;
+    transition:color .15s, background .15s;
+  }
+  .nav-signin:hover { color:var(--text); background:var(--bg-elev); }
+
+  /* Buttons */
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:0.9375rem;
+    text-decoration:none;
+    border-radius:10px;
+    padding:11px 18px;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .15s, border-color .15s, color .15s;
+    cursor:pointer;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .btn-primary {
+    background:var(--red);
+    color:#fff;
+    box-shadow:0 1px 0 rgba(255,255,255,0.18) inset, 0 8px 24px -8px rgba(255,69,56,0.5);
+  }
+  .btn-primary:hover { background:var(--red-bright); transform:translateY(-1px); }
+  .btn-secondary {
+    background:transparent;
+    color:var(--text);
+    border-color:var(--border-strong);
+  }
+  .btn-secondary:hover { border-color:rgba(255,255,255,0.32); background:var(--bg-elev); }
+  .btn-lg { padding:14px 22px; font-size:1rem; border-radius:11px; }
+  .btn .arrow { width:14px; height:14px; transition:transform .15s; }
+  .btn:hover .arrow { transform:translateX(2px); }
+
+  /* ─────────── HERO ─────────── */
+  .hero { position:relative; padding:128px 0 88px; overflow:hidden; isolation:isolate; }
+  @media (min-width:900px) { .hero { padding:160px 0 120px; } }
+  .hero::before {
+    content:''; position:absolute; inset:0; z-index:-2;
+    background:
+      radial-gradient(900px 500px at 80% 0%, rgba(255,69,56,0.18), transparent 60%),
+      radial-gradient(700px 500px at 5% 30%, rgba(255,69,56,0.08), transparent 60%);
+  }
+  .hero::after {
+    content:''; position:absolute; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:64px 64px;
+    background-position:-1px -1px;
+    mask-image:radial-gradient(ellipse at 50% 30%, black 30%, transparent 80%);
+    -webkit-mask-image:radial-gradient(ellipse at 50% 30%, black 30%, transparent 80%);
+  }
+  .hero-grid {
+    display:grid; grid-template-columns:1fr; gap:64px; align-items:center;
+  }
+  @media (min-width:1000px) {
+    .hero-grid { grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:72px; }
+  }
+  .hero h1 { font-size:clamp(2.5rem, 6vw, 4.75rem); margin-top:18px; max-width:14ch; }
+  .hero h1 em { font-style:normal; color:var(--red); }
+  .hero p.lead { margin-top:22px; font-size:clamp(1.0625rem, 1.4vw, 1.1875rem); }
+  .hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:36px; }
+  .hero-meta { margin-top:28px; display:flex; align-items:center; gap:14px; color:var(--text-subtle); font-size:0.85rem; }
+  .hero-meta .dot { width:6px; height:6px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px var(--mint-soft); }
+
+  /* Hero product card */
+  .product-card {
+    position:relative;
+    background:linear-gradient(180deg, var(--bg-elev) 0%, var(--bg-elev-2) 100%);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
+    padding:18px;
+    overflow:hidden;
+  }
+  .product-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  }
+  .pc-head { display:flex; align-items:center; justify-content:space-between; padding:6px 6px 14px; border-bottom:1px solid var(--border); margin-bottom:10px; }
+  .pc-tabs { display:flex; gap:18px; }
+  .pc-tab { font-size:0.78rem; font-weight:600; color:var(--text-subtle); padding:4px 0; border-bottom:1.5px solid transparent; }
+  .pc-tab.active { color:var(--text); border-color:var(--red); }
+  .pc-status { font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--mint); display:inline-flex; align-items:center; gap:6px; }
+  .pc-status::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--mint); }
+  .pc-msg { display:grid; grid-template-columns:32px 1fr auto; gap:12px; align-items:flex-start; padding:14px 8px; border-bottom:1px solid var(--border); }
+  .pc-msg:last-child { border-bottom:none; }
+  .pc-avatar { width:32px; height:32px; border-radius:50%; background:var(--bg-elev-3); display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; color:var(--text-muted); }
+  .pc-avatar.r { background:var(--red-soft); color:var(--red-bright); }
+  .pc-msg-body { min-width:0; }
+  .pc-msg-meta { display:flex; align-items:center; gap:8px; font-size:0.74rem; }
+  .pc-msg-meta .who { color:var(--text); font-weight:600; }
+  .pc-msg-meta .scope {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.62rem;
+    padding:2px 6px; border-radius:4px;
+    background:var(--red-soft); color:var(--red-bright);
+    letter-spacing:0.06em; text-transform:uppercase;
+  }
+  .pc-msg-meta .scope.club { background:rgba(111,227,201,0.12); color:var(--mint); }
+  .pc-msg-meta .scope.event { background:rgba(255,255,255,0.08); color:var(--text-muted); }
+  .pc-msg-text { font-size:0.83rem; color:var(--text-muted); margin-top:4px; line-height:1.5; }
+  .pc-msg-receipt { font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--text-subtle); text-align:right; padding-top:2px; white-space:nowrap; }
+  .pc-msg-receipt strong { color:var(--mint); font-weight:500; }
+
+  /* ─────────── ORIGIN LINE ─────────── */
+  .origin {
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    background:rgba(255,255,255,0.012);
+  }
+  .origin-inner {
+    padding:22px 24px;
+    text-align:center;
+    font-size:0.85rem;
+    color:var(--text-subtle);
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.04em;
+  }
+  .origin-inner span { color:var(--text-muted); }
+
+  /* ─────────── SECTION FRAME ─────────── */
+  section { padding:96px 0; position:relative; }
+  @media (min-width:900px) { section { padding:128px 0; } }
+  .section-head { max-width:680px; margin-bottom:56px; }
+  .section-head h2 { font-size:clamp(2rem, 4vw, 3rem); margin-top:14px; color:var(--text); }
+  .section-head p { margin-top:18px; }
+
+  /* ─────────── THE PAIN ─────────── */
+  .pain { position:relative; isolation:isolate; }
+  .pain::before {
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:radial-gradient(900px 400px at 50% 50%, rgba(255,69,56,0.05), transparent 70%);
+  }
+  .pain-inner { max-width:920px; margin:0 auto; text-align:center; }
+  .pain h2 {
+    font-family:'Inter Tight',sans-serif;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    font-size:clamp(1.75rem, 3.6vw, 2.75rem);
+    line-height:1.18;
+    color:var(--text);
+  }
+  .pain h2 .strike {
+    color:var(--text-muted);
+    text-decoration:line-through;
+    text-decoration-color:var(--red);
+    text-decoration-thickness:2px;
+    text-decoration-skip-ink:none;
+    text-underline-offset:0;
+  }
+  .pain-list {
+    margin:48px auto 40px;
+    max-width:760px;
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  }
+  .pain-pill {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    padding:8px 14px;
+    border-radius:999px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    color:var(--text-muted);
+  }
+  .pain-pill.danger { color:var(--red-bright); border-color:rgba(255,69,56,0.28); background:var(--red-soft); }
+  .pain-punch {
+    margin-top:12px;
+    font-family:'Inter Tight',sans-serif;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    font-size:clamp(1.5rem, 3vw, 2.25rem);
+    color:var(--text);
+  }
+  .pain-punch em { font-style:normal; color:var(--red); }
+
+  /* ─────────── PERSONAS ─────────── */
+  .personas { padding-top:0; }
+  .persona {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:36px;
+    align-items:center;
+    border-top:1px solid var(--border);
+    padding:64px 0;
+  }
+  .persona:first-of-type { border-top:none; padding-top:0; }
+  @media (min-width:900px) {
+    .persona { grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:64px; padding:88px 0; }
+    .persona.flip > .persona-text { order:2; }
+    .persona.flip > .persona-mock { order:1; }
+  }
+  .persona-text { display:flex; flex-direction:column; gap:20px; }
+  .persona-text h3 {
+    font-family:'Inter Tight',sans-serif;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    font-size:clamp(1.625rem, 3vw, 2.25rem);
+    color:var(--text);
+    margin-top:6px;
+  }
+  .persona-quote {
+    font-family:'Inter Tight',sans-serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(1.125rem, 1.8vw, 1.375rem);
+    line-height:1.4;
+    color:var(--text);
+    padding-left:18px;
+    border-left:2px solid var(--red);
+  }
+  /* Mobile fallback — flex with bullet */
+  .persona-list { list-style:none; display:flex; flex-direction:column; gap:12px; margin-top:8px; font-size:0.95rem; line-height:1.55; }
+  .persona-list li { display:flex; gap:12px; align-items:flex-start; color:var(--text); }
+  .persona-list li::before {
+    content:''; flex-shrink:0; margin-top:8px;
+    width:6px; height:6px; border-radius:50%; background:var(--red);
+  }
+  .persona-list li strong { font-weight:600; color:var(--text); }
+  .persona-list li span { color:var(--text-muted); }
+
+  /* Desktop — subgrid keeps the em-dashes vertically aligned */
+  @media (min-width:720px) {
+    .persona-list {
+      display:grid;
+      grid-template-columns:6px max-content 1fr;
+      gap:12px 14px;
+      align-items:baseline;
+    }
+    .persona-list li {
+      display:grid;
+      grid-template-columns:subgrid;
+      grid-column:1 / -1;
+      align-items:baseline;
+      gap:0;
+    }
+    .persona-list li::before {
+      align-self:center;
+      margin-top:0;
+    }
+  }
+
+  /* Persona mock card */
+  .persona-mock {
+    background:linear-gradient(180deg, var(--bg-elev) 0%, var(--bg-elev-2) 100%);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius-lg);
+    padding:18px;
+    box-shadow:var(--shadow-card);
+    position:relative;
+    overflow:hidden;
+  }
+  .persona-mock::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent);
+  }
+  .pm-head {
+    display:flex; align-items:center; justify-content:space-between;
+    padding-bottom:14px; border-bottom:1px solid var(--border); margin-bottom:14px;
+  }
+  .pm-title { font-size:0.82rem; font-weight:700; color:var(--text); letter-spacing:-0.01em; }
+  .pm-meta { font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--text-subtle); letter-spacing:0.08em; }
+
+  /* Organiser dashboard mini */
+  .pm-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .pm-stat { background:var(--bg); padding:14px 12px; }
+  .pm-stat .num { font-family:'Inter Tight',sans-serif; font-weight:800; font-size:1.5rem; color:var(--text); letter-spacing:-0.02em; }
+  .pm-stat .num em { font-style:normal; color:var(--red); }
+  .pm-stat .lab { font-family:'JetBrains Mono',monospace; font-size:0.6rem; color:var(--text-subtle); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
+  .pm-bars { margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .pm-bar-row { display:grid; grid-template-columns:80px 1fr 40px; gap:10px; align-items:center; font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--text-muted); }
+  .pm-bar-track { height:6px; background:var(--bg); border-radius:3px; overflow:hidden; }
+  .pm-bar-fill { height:100%; background:var(--red); border-radius:3px; }
+  .pm-bar-fill.mint { background:var(--mint); }
+
+  /* Coach app screenshot (image already includes iPhone frame) */
+  .coach-shot-wrap {
+    position:relative;
+    display:flex; justify-content:center; align-items:center;
+    min-height:480px;
+    padding:8px;
+  }
+  .coach-shot {
+    max-width:100%;
+    max-height:640px;
+    height:auto;
+    width:auto;
+    display:block;
+    filter:drop-shadow(0 40px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 24px rgba(255,69,56,0.08));
+  }
+  .coach-shot-placeholder {
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    color:var(--text-subtle);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; line-height:1.7; letter-spacing:0.04em;
+    background:var(--bg-elev);
+    border:1px dashed var(--border-strong);
+    border-radius:var(--radius-lg);
+    padding:40px 28px;
+  }
+  .coach-shot-placeholder code {
+    color:var(--text); background:var(--bg); padding:3px 8px; border-radius:4px;
+    border:1px solid var(--border-strong); display:inline-block; margin-top:8px;
+  }
+  .coach-shot-wrap.img-loaded .coach-shot-placeholder { display:none; }
+  .coach-shot-wrap.img-failed .coach-shot { display:none; }
+
+  /* Volunteer slot card */
+  .pm-vol-list { display:flex; flex-direction:column; gap:10px; }
+  .pm-vol-slot {
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 14px;
+    background:var(--bg);
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:14px;
+    align-items:center;
+  }
+  .pm-vol-slot.mine { border-color:rgba(255,69,56,0.32); background:linear-gradient(180deg, var(--red-soft), transparent 110%); }
+  .pm-vol-time {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; line-height:1.2;
+    color:var(--text); text-align:center;
+    padding:4px 8px; border-radius:6px;
+    background:var(--bg-elev-2);
+  }
+  .pm-vol-time strong { display:block; color:var(--text); font-weight:600; }
+  .pm-vol-time span { color:var(--text-subtle); font-size:0.6rem; letter-spacing:0.05em; }
+  .pm-vol-body { min-width:0; }
+  .pm-vol-title { font-size:0.86rem; font-weight:600; color:var(--text); }
+  .pm-vol-loc { font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--text-subtle); margin-top:3px; letter-spacing:0.06em; }
+  .pm-vol-cap { font-family:'JetBrains Mono',monospace; font-size:0.66rem; text-align:right; color:var(--text-muted); }
+  .pm-vol-cap strong { color:var(--mint); font-weight:500; }
+  .pm-vol-cap.mine { color:var(--red-bright); font-weight:500; }
+
+  /* ─────────── PILLARS (5) ─────────── */
+  .pillars-grid {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  @media (min-width:680px) { .pillars-grid { grid-template-columns:repeat(2,1fr); gap:16px; } }
+  @media (min-width:1000px) { .pillars-grid { grid-template-columns:repeat(6,1fr); gap:16px; } }
+  .pillar {
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:28px 26px;
+    display:flex; flex-direction:column; gap:14px;
+    transition:border-color .2s, transform .2s, background .2s;
+  }
+  .pillar:hover { border-color:var(--border-strong); transform:translateY(-3px); background:var(--bg-elev-2); }
+  /* On desktop: 3-2 layout via column spans */
+  @media (min-width:1000px) {
+    .pillar:nth-child(1), .pillar:nth-child(2), .pillar:nth-child(3) { grid-column:span 2; }
+    .pillar:nth-child(4) { grid-column:span 3; }
+    .pillar:nth-child(5) { grid-column:span 3; }
+  }
+  .pillar-icon {
+    width:40px; height:40px; border-radius:10px;
+    background:var(--red-soft);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--red-bright);
+    margin-bottom:4px;
+  }
+  .pillar-num {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem;
+    color:var(--text-subtle);
+    letter-spacing:0.14em;
+  }
+  .pillar h3 {
+    font-family:'Inter Tight',sans-serif;
+    font-weight:800;
+    letter-spacing:-0.015em;
+    font-size:1.25rem;
+    color:var(--text);
+  }
+  .pillar p { font-size:0.95rem; color:var(--text-muted); line-height:1.6; }
+  .pillar ul { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+  .pillar ul li {
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:0.85rem; color:var(--text); line-height:1.45;
+  }
+  .pillar ul li::before { content:''; flex-shrink:0; margin-top:7px; width:5px; height:5px; border-radius:50%; background:var(--red); }
+  .pillar ul li span { color:var(--text-muted); }
+
+  /* ─────────── HOW IT WORKS ─────────── */
+  .steps {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+  }
+  @media (min-width:820px) { .steps { grid-template-columns:repeat(3,1fr); } }
+  .step { background:var(--bg-elev); padding:32px 28px 36px; display:flex; flex-direction:column; gap:14px; transition:background .2s; }
+  .step:hover { background:var(--bg-elev-2); }
+  .step-num { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--red); letter-spacing:0.12em; }
+  .step-icon {
+    width:42px; height:42px; border-radius:10px;
+    background:var(--red-soft);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--red-bright);
+    margin-bottom:6px;
+  }
+  .step h3 { font-family:'Inter Tight',sans-serif; font-size:1.25rem; font-weight:700; letter-spacing:-0.01em; color:var(--text); }
+  .step p { font-size:0.95rem; color:var(--text-muted); line-height:1.6; }
+
+  /* ─────────── WHY WE BUILT IT ─────────── */
+  .why { display:grid; grid-template-columns:1fr; gap:48px; align-items:start; }
+  @media (min-width:900px) { .why { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:72px; } }
+  .why-prose p { font-size:1.0625rem; color:var(--text-muted); line-height:1.7; }
+  .why-prose p + p { margin-top:18px; }
+  .why-prose strong { color:var(--text); font-weight:600; }
+  .why-list {
+    display:flex; flex-direction:column;
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    background:var(--bg-elev);
+  }
+  .why-list-item {
+    padding:24px 26px;
+    display:flex; gap:18px; align-items:flex-start;
+    border-bottom:1px solid var(--border);
+  }
+  .why-list-item:last-child { border-bottom:none; }
+  .why-list-item .ic {
+    width:36px; height:36px; border-radius:8px;
+    background:var(--bg-elev-2);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--red-bright);
+    flex-shrink:0;
+  }
+  .why-list-item h4 { font-family:'Inter Tight',sans-serif; font-size:1.0625rem; font-weight:700; letter-spacing:-0.01em; color:var(--text); }
+  .why-list-item p { font-size:0.92rem; color:var(--text-muted); margin-top:4px; line-height:1.55; }
+
+  /* ─────────── FINAL CTA ─────────── */
+  .cta { position:relative; overflow:hidden; text-align:center; isolation:isolate; }
+  .cta::before {
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(800px 400px at 50% 100%, rgba(255,69,56,0.22), transparent 70%),
+      radial-gradient(600px 400px at 50% 0%, rgba(255,69,56,0.06), transparent 60%);
+  }
+  .cta-eyebrow {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--red-soft);
+    color:var(--red-bright);
+    border:1px solid rgba(255,69,56,0.28);
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    margin-bottom:24px;
+  }
+  .cta-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--red); }
+  .cta h2 {
+    font-size:clamp(2.5rem, 5.5vw, 4.5rem);
+    color:var(--text);
+    max-width:16ch; margin:0 auto;
+  }
+  .cta h2 em { font-style:normal; color:var(--red); }
+  .cta p { margin:24px auto 0; max-width:48ch; }
+  .cta-actions { margin-top:38px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .cta-foot { margin-top:18px; font-size:0.78rem; color:var(--text-subtle); font-family:'JetBrains Mono',monospace; letter-spacing:0.04em; }
+
+  /* ─────────── FOOTER ─────────── */
+  footer { border-top:1px solid var(--border); padding:64px 0 40px; }
+  .foot-grid { display:grid; grid-template-columns:1fr; gap:40px; margin-bottom:48px; }
+  @media (min-width:760px) { .foot-grid { grid-template-columns:1.4fr 1fr 1fr; gap:64px; } }
+  .foot-brand { display:flex; flex-direction:column; gap:14px; max-width:34ch; }
+  .foot-brand p { font-size:0.9rem; color:var(--text-muted); line-height:1.6; }
+  .foot-col h5 {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; font-weight:500;
+    color:var(--text-subtle);
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .foot-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .foot-col a {
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:0.92rem;
+    transition:color .15s;
+  }
+  .foot-col a:hover { color:var(--text); }
+  .foot-bottom {
+    border-top:1px solid var(--border);
+    padding-top:24px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+    font-size:0.82rem;
+    color:var(--text-subtle);
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.02em;
+  }
+
+  /* ─────────── REVEAL ─────────── */
+  .reveal { opacity:0; transform:translateY(18px); transition:opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce) {
+    .reveal { opacity:1; transform:none; transition:none; }
+    html { scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to content</a>
+
+<!-- ─────────── NAV ─────────── -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand" aria-label="Ludum Events home">
+      <img class="brand-mark" src="assets/logo-mark.png" alt="Ludum" width="35" height="28">
+      <span class="brand-text">Ludum<span> Events</span></span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#personas">Who it's for</a>
+      <a href="#pillars">What it does</a>
+      <a href="#how">How it works</a>
+      <a href="#why">Why Ludum</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="https://app.ludumevents.com/auth/login" class="nav-signin">Sign in</a>
+      <a href="mailto:adrian@ludum.com?subject=Set%20up%20my%20regatta%20on%20LudumEvents" class="btn btn-primary">
+        Get set up
+        <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────── HERO ─────────── -->
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Software for rowing regatta organisers</span>
+        <h1 class="display">The operating system for your <em>rowing regatta</em>.</h1>
+        <p class="lead">From the online entry system to the awards programme: entries, communications, dashboards, volunteers and the whole print pack &mdash; in one place. Built for the people running small and large events.</p>
+        <div class="hero-actions">
+          <a href="mailto:adrian@ludum.com?subject=Set%20up%20my%20regatta%20on%20LudumEvents" class="btn btn-primary btn-lg">
+            Get your regatta set up
+            <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://calendly.com/adrian-cassidy/demo" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">Talk to us first</a>
+        </div>
+        <div class="hero-meta">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Free until 31 August 2026 &middot; no card required</span>
+        </div>
+      </div>
+
+      <!-- Hero product card mock -->
+      <div class="product-card" aria-hidden="true">
+        <div class="pc-head">
+          <div class="pc-tabs">
+            <span class="pc-tab active">Inbox</span>
+            <span class="pc-tab">Compose</span>
+            <span class="pc-tab">Crews</span>
+          </div>
+          <span class="pc-status">Live</span>
+        </div>
+
+        <div class="pc-msg">
+          <div class="pc-avatar r">RC</div>
+          <div class="pc-msg-body">
+            <div class="pc-msg-meta">
+              <span class="who">Race Control</span>
+              <span class="scope">All</span>
+            </div>
+            <div class="pc-msg-text">Wind warning &mdash; heats 18&ndash;24 delayed 20 minutes. Marshalling moves to A-dock.</div>
+          </div>
+          <div class="pc-msg-receipt">
+            <strong>312/312</strong><br>delivered
+          </div>
+        </div>
+
+        <div class="pc-msg">
+          <div class="pc-avatar">CB</div>
+          <div class="pc-msg-body">
+            <div class="pc-msg-meta">
+              <span class="who">City Boat Club</span>
+              <span class="scope club">Club</span>
+            </div>
+            <div class="pc-msg-text">Trailer parking moved to Lot C. Please brief your crews on arrival.</div>
+          </div>
+          <div class="pc-msg-receipt">
+            <strong>14/14</strong><br>read
+          </div>
+        </div>
+
+        <div class="pc-msg">
+          <div class="pc-avatar">AC</div>
+          <div class="pc-msg-body">
+            <div class="pc-msg-meta">
+              <span class="who">Alex Carter</span>
+              <span class="scope event">Crew E04 4&times;</span>
+            </div>
+            <div class="pc-msg-text">Lane swap with Westside SC for E04. New draw uploaded.</div>
+          </div>
+          <div class="pc-msg-receipt">
+            <strong>read</strong><br>2m ago
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── ORIGIN BAND ─────────── -->
+<div class="origin">
+  <div class="origin-inner">
+    Built inside the National Schools' Regatta. <span>Now ready for any multi-club rowing event.</span>
+  </div>
+</div>
+
+<!-- ─────────── THE PAIN ─────────── -->
+<section class="pain">
+  <div class="wrap">
+    <div class="pain-inner">
+      <span class="eyebrow reveal" style="justify-content:center;">The current setup</span>
+      <h2 class="reveal" style="margin-top:18px;">Right now your regatta runs on <span class="strike">six WhatsApp groups</span>, <span class="strike">three spreadsheets</span>, <span class="strike">two designers</span>, <span class="strike">a draw from time-team.nl</span>, <span class="strike">a printer chasing the t-shirt list</span>, and <span class="strike">one email in the wrong direction at 11pm on a Friday</span>.</h2>
+
+      <div class="pain-list reveal">
+        <span class="pain-pill">WhatsApp: Coaches 2026</span>
+        <span class="pain-pill">WhatsApp: Officials</span>
+        <span class="pain-pill">crews_v7_FINAL.xlsx</span>
+        <span class="pain-pill">Designer waiting on blade artwork</span>
+        <span class="pain-pill">"who's parking where?"</span>
+        <span class="pain-pill">draw_timetable.csv</span>
+        <span class="pain-pill danger">"Reply All" by accident</span>
+      </div>
+
+      <p class="pain-punch reveal">LudumEvents is what <em>replaces all of it</em>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── PERSONAS ─────────── -->
+<section id="personas" class="personas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Who it's for</span>
+      <h2 class="display">Three jobs at the regatta. One app each side of the desk.</h2>
+      <p class="lead">Organisers run the event. Coaches show up with their crews. Volunteers keep the day moving. Ludum gives each of them only what they need &mdash; and nothing they don't.</p>
+    </div>
+
+    <!-- ─── ORGANISER ─── -->
+    <div class="persona reveal">
+      <div class="persona-text">
+        <span class="eyebrow">For the organiser</span>
+        <h3>The director's chair, on a single screen.</h3>
+        <p class="persona-quote">&ldquo;I've got 200 crews, 47 clubs, a printer waiting on blade artwork, and a forecast that's about to change.&rdquo;</p>
+        <ul class="persona-list">
+          <li><strong>One dashboard</strong> <span>&mdash; live counts of clubs, crews, invites sent, payments in.</span></li>
+          <li><strong>Every coach reachable in three clicks</strong> <span>&mdash; pick a scope, write the message, send.</span></li>
+          <li><strong>Every print export ready to ship</strong> <span>&mdash; t-shirts, blade colours, brochure, infographic, timetable PDF.</span></li>
+          <li><strong>Every volunteer in their slot</strong> <span>&mdash; no spreadsheet handed to a friend on a clipboard.</span></li>
+        </ul>
+      </div>
+
+      <div class="persona-mock" aria-hidden="true">
+        <div class="pm-head">
+          <span class="pm-title">Henley Schools' Regatta &mdash; Dashboard</span>
+          <span class="pm-meta">14 days to go</span>
+        </div>
+        <div class="pm-stats">
+          <div class="pm-stat">
+            <div class="num">47</div>
+            <div class="lab">Clubs</div>
+          </div>
+          <div class="pm-stat">
+            <div class="num">312</div>
+            <div class="lab">Crews</div>
+          </div>
+          <div class="pm-stat">
+            <div class="num"><em>198</em>/312</div>
+            <div class="lab">Coaches in</div>
+          </div>
+        </div>
+        <div class="pm-bars">
+          <div class="pm-bar-row"><span>Submitted</span><div class="pm-bar-track"><div class="pm-bar-fill" style="width:88%;"></div></div><span>275</span></div>
+          <div class="pm-bar-row"><span>Paid</span><div class="pm-bar-track"><div class="pm-bar-fill mint" style="width:72%;"></div></div><span>225</span></div>
+          <div class="pm-bar-row"><span>Doubling-up</span><div class="pm-bar-track"><div class="pm-bar-fill" style="width:6%;background:#FF4538;"></div></div><span>3</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── COACH ─── -->
+    <div class="persona flip reveal">
+      <div class="persona-text">
+        <span class="eyebrow">For the coach</span>
+        <h3>Everything you need on race day, and nothing you don't.</h3>
+        <p class="persona-quote">&ldquo;Did the start time change? Where do we park the trailer? Did anyone send me the new draw?&rdquo;</p>
+        <ul class="persona-list">
+          <li><strong>One inbox per regatta</strong> <span>&mdash; only what affects your crews, in one thread.</span></li>
+          <li><strong>Push when it matters</strong> <span>&mdash; safety calls and lane swaps land on the lock screen.</span></li>
+          <li><strong>Crew sheet in your pocket</strong> <span>&mdash; rowers, boats, events, even offline.</span></li>
+          <li><strong>Reply privately</strong> <span>&mdash; not Reply-All to 311 other coaches.</span></li>
+        </ul>
+      </div>
+
+      <div class="coach-shot-wrap" aria-hidden="true">
+        <img src="assets/coach-app.png"
+             alt="Coach view of the Ludum app on iPhone"
+             class="coach-shot"
+             loading="lazy"
+             onload="this.parentElement.classList.add('img-loaded')"
+             onerror="this.parentElement.classList.add('img-failed')">
+        <div class="coach-shot-placeholder">
+          Save the coach app screenshot as
+          <code>assets/coach-app.png</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── VOLUNTEER ─── -->
+    <div class="persona reveal">
+      <div class="persona-text">
+        <span class="eyebrow">For the volunteer</span>
+        <h3>Your shifts, your spot, your day &mdash; sorted.</h3>
+        <p class="persona-quote">&ldquo;When am I on, where am I, and what am I doing?&rdquo;</p>
+        <ul class="persona-list">
+          <li><strong>Self-serve sign-up</strong> <span>&mdash; pick your shifts from one link, see them fill in real time.</span></li>
+          <li><strong>Personal timetable</strong> <span>&mdash; only your slots, with location, time and team.</span></li>
+          <li><strong>Live updates from the desk</strong> <span>&mdash; no more chasing organisers for changes.</span></li>
+          <li><strong>Capacity at a glance</strong> <span>&mdash; know a slot's full before you turn up.</span></li>
+        </ul>
+      </div>
+
+      <div class="persona-mock" aria-hidden="true">
+        <div class="pm-head">
+          <span class="pm-title">My weekend &mdash; Sat 23 May</span>
+          <span class="pm-meta">3 shifts</span>
+        </div>
+        <div class="pm-vol-list">
+          <div class="pm-vol-slot mine">
+            <div class="pm-vol-time"><strong>07:00</strong><span>2h</span></div>
+            <div class="pm-vol-body">
+              <div class="pm-vol-title">Boating Bay 2 &mdash; morning</div>
+              <div class="pm-vol-loc">RIVERSIDE / NORTH</div>
+            </div>
+            <div class="pm-vol-cap mine">You're on</div>
+          </div>
+          <div class="pm-vol-slot mine">
+            <div class="pm-vol-time"><strong>11:30</strong><span>3h</span></div>
+            <div class="pm-vol-body">
+              <div class="pm-vol-title">Finish-line marshal</div>
+              <div class="pm-vol-loc">FINISH TOWER</div>
+            </div>
+            <div class="pm-vol-cap mine">You're on</div>
+          </div>
+          <div class="pm-vol-slot">
+            <div class="pm-vol-time"><strong>15:00</strong><span>2h</span></div>
+            <div class="pm-vol-body">
+              <div class="pm-vol-title">Awards setup</div>
+              <div class="pm-vol-loc">CLUBHOUSE LAWN</div>
+            </div>
+            <div class="pm-vol-cap"><strong>4</strong>/6</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── PILLARS ─────────── -->
+<section id="pillars" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What's in the box</span>
+      <h2 class="display">Five things, one app.</h2>
+      <p class="lead">Everything a regatta director already does &mdash; just done in one place, in a tenth of the time, with a record of every action.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <article class="pillar reveal">
+        <span class="pillar-num">01 &middot; Entries</span>
+        <div class="pillar-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v4H4zM4 11h16v8H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 15h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Data in. Regatta out.</h3>
+        <p>Drop in your Entry system download, clubs, events, crews and competitors land in seconds. Re-upload anytime &mdash; race-day flags and sent invites survive.</p>
+        <ul>
+          <li>Zip import in one click</li>
+          <li>Diff added/removed/modified on every re-upload</li>
+          <li>Coaches dedup&rsquo;d across multiple clubs</li>
+        </ul>
+      </article>
+
+      <article class="pillar reveal">
+        <span class="pillar-num">02 &middot; Communications</span>
+        <div class="pillar-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 12a8 8 0 1 1-3.5-6.6L21 4v5h-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Six scopes. Two-way replies.</h3>
+        <p>Reach one coach, one crew, one event, one club, the committee, or every coach you've got &mdash; with push first and email as the silent backup.</p>
+        <ul>
+          <li>Six precise scopes, not "everyone"</li>
+          <li>Replies thread privately back to you</li>
+          <li>Confirmation step on global sends</li>
+        </ul>
+      </article>
+
+      <article class="pillar reveal">
+        <span class="pillar-num">03 &middot; Dashboards</span>
+        <div class="pillar-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19V9m6 10V5m6 14v-7m6 7V11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h3>The screen you actually look at.</h3>
+        <p>Clubs overview, doubling-up alerts, crew status, payment progress &mdash; the spreadsheets you used to chase, alive on a screen.</p>
+        <ul>
+          <li>Doubling-up flagged automatically</li>
+          <li>Per-club entry and payment view</li>
+          <li>Mark crews eliminated on race day</li>
+        </ul>
+      </article>
+
+      <article class="pillar reveal">
+        <span class="pillar-num">04 &middot; The print pack</span>
+        <div class="pillar-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="12" height="6" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="9" width="18" height="9" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="6" y="14" width="12" height="7" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Apps with the app.</h3>
+        <p>Generate a print-ready boat number for time trials, with club, event and crew info. Create T-shirt name list, blade colours sheet, programme infographic and some social media posts.</p>
+        <ul>
+          <li>Some insightful social media posts</li>
+          <li>T-shirt names for your shop</li>
+          <li>Infographic for socials, and website</li>
+          <li>Zero manual edits per new club</li>
+        </ul>
+      </article>
+
+      <article class="pillar reveal">
+        <span class="pillar-num">05 &middot; Volunteers</span>
+        <div class="pillar-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="9" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M16 20a4 4 0 0 1 5-3.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Slots that fill themselves.</h3>
+        <p>Create the shifts you need, share one signup link, watch capacity tick up. Each volunteer gets their own timetable for the day.</p>
+        <ul>
+          <li>Self-serve signup, no logins</li>
+          <li>Per-volunteer personal timetable</li>
+          <li>Live capacity, no double-booking</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── HOW IT WORKS ─────────── -->
+<section id="how" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">How it works</span>
+      <h2 class="display">Day one to race day, in three steps.</h2>
+      <p class="lead">Most regatta directors set up Ludum in a single sitting. Here's the path from a fresh login to a coach's phone buzzing on the towpath.</p>
+    </div>
+
+    <div class="steps reveal">
+      <div class="step">
+        <span class="step-num">01 &middot; Import</span>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Drop in the Entries Data.</h3>
+        <p>Clubs, events, crews and competitors populate. Branding, dates and your sender email go in once. Your race-day eliminations and sent invites are preserved on every re-import.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">02 &middot; Invite</span>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 7l9 7 9-7" stroke="currentColor" stroke-width="1.6"/></svg>
+        </div>
+        <h3>One click, every coach.</h3>
+        <p>Bulk magic-link invites go out, deduped by email. Coaches install the app, see their crews, and you can start composing. Re-clicking only emails new coaches &mdash; never spam.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">03 &middot; Run the day</span>
+        <div class="step-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Broadcast, swap, mark, hand off.</h3>
+        <p>Send the wind warning to every crew on the water. Swap a lane. Mark an elimination. Hand the printer the brochure pack. Watch read-receipts roll in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────── WHY WE BUILT IT ─────────── -->
+<section id="why" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal" style="max-width:680px;">
+      <span class="eyebrow">Why Ludum</span>
+      <h2 class="display">We built this because we run regattas.</h2>
+    </div>
+
+    <div class="why">
+      <div class="why-prose reveal">
+        <p>Ludum started inside the National Schools' Regatta &mdash; one of the busiest three-day rowing events in the World, with hundreds of crews, dozens of clubs and a coach for every one of them. The communication tools didn't exist. So we built them.</p>
+        <p>The result is a platform that takes the messy reality of a competitive regatta &mdash; coaches who run for three clubs, last-minute draws, the wind picking up at the wrong end of the course, the printer who needs the blade brochure on Wednesday &mdash; and turns it into <strong>an inbox you can actually run an event from</strong>.</p>
+        <p>It's now generalising to any multi-club rowing event.</p>
+      </div>
+
+      <aside class="why-list reveal" aria-label="What you get out of the box">
+        <div class="why-list-item">
+          <div class="ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div>
+            <h4>Audit logs on every action</h4>
+            <p>Every import, every send, every edit &mdash; captured. Nothing happens silently.</p>
+          </div>
+        </div>
+        <div class="why-list-item">
+          <div class="ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7l8-4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div>
+            <h4>Safety modal on global sends</h4>
+            <p>The "everyone, everywhere" send is one click away &mdash; but never one click. A confirmation step keeps the wrong message from going wide.</p>
+          </div>
+        </div>
+        <div class="why-list-item">
+          <div class="ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div>
+            <h4>Private replies, not Reply-All</h4>
+            <p>Coaches reply to broadcasts privately. No noise for the other 311 people on the thread.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!--
+  ─────────── TESTIMONIAL SLOT (drop in after 26 May 2026) ───────────
+  Add a section here once the NSR director's quote is in. Suggested format:
+
+  <section class="testimonial" style="padding-top:0;">
+    <div class="wrap">
+      <div class="reveal" style="max-width:880px; margin:0 auto; text-align:center;">
+        <span class="eyebrow" style="justify-content:center;">From the desk</span>
+        <p class="display" style="font-size:clamp(1.5rem,3vw,2.25rem); margin-top:18px; font-weight:700;">
+          &ldquo;[QUOTE GOES HERE — ideally something like 'We used to spend three days laying out the
+          blade brochure. This year it took twenty minutes.']&rdquo;
+        </p>
+        <p style="margin-top:24px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-subtle); letter-spacing:0.08em;">
+          — [NAME], [ROLE], National Schools&rsquo; Regatta
+        </p>
+      </div>
+    </div>
+  </section>
+-->
+
+<!-- ─────────── FINAL CTA ─────────── -->
+<section class="cta">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="cta-eyebrow">Free until 31 August 2026</span>
+      <h2 class="display">Bring your <em>summer regatta</em> on board.</h2>
+      <p class="lead" style="margin-left:auto;margin-right:auto;">Set up your event, import your entries, send your first message in under ten minutes. No card, no contract, no IT ticket. We'll talk pricing only when you've seen the value.</p>
+      <div class="cta-actions">
+        <a href="mailto:adrian@ludum.com?subject=Set%20up%20my%20regatta%20on%20LudumEvents" class="btn btn-primary btn-lg">
+          Get your regatta set up
+          <svg class="arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0L9 4m4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://calendly.com/adrian-cassidy/demo" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">Talk to us first</a>
+      </div>
+      <div class="cta-foot">Free for the 2026 summer season &middot; no card on file</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ─────────── FOOTER ─────────── -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="/" class="brand" aria-label="Ludum Events home">
+          <img class="brand-mark" src="assets/logo-mark.png" alt="Ludum" width="35" height="28">
+          <span class="brand-text">Ludum<span> Events</span></span>
+        </a>
+        <p>The operating system for your rowing regatta. Entries, comms, dashboards, volunteers and the print pack &mdash; in one place.</p>
+      </div>
+
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#personas">Who it's for</a></li>
+          <li><a href="#pillars">What it does</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="mailto:adrian@ludum.com?subject=Set%20up%20my%20regatta%20on%20LudumEvents">Get set up</a></li>
+          <li><a href="https://app.ludumevents.com/auth/login">Sign in</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#why">Why Ludum</a></li>
+          <li><a href="mailto:hello@ludumevents.com">Contact</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>&copy; <span id="yr">2026</span> Ludum. All rights reserved.</span>
+      <span>ludumevents.com</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver((entries) => {
+      let staggerIndex = 0;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = (staggerIndex * 60) + 'ms';
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+          staggerIndex++;
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  }
+</script>
+
+</body>
+</html>
