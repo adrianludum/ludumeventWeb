@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Ludum Events</title>
+<meta name="description" content="The terms under which Ludum Events is provided. Plain English, no surprises.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0A0A0B">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:           #0A0A0B;
+    --bg-elev:      #131316;
+    --bg-elev-2:    #1A1A1F;
+    --border:       rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.16);
+    --text:         #F5F2ED;
+    --text-muted:   rgba(245,242,237,0.72);
+    --text-subtle:  rgba(245,242,237,0.42);
+    --red:          #FF4538;
+    --red-soft:     rgba(255,69,56,0.14);
+    --max:          760px;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; font-size:16px; }
+  ::selection { background:var(--red); color:#fff; }
+  :focus-visible { outline:2px solid var(--red); outline-offset:3px; border-radius:4px; }
+
+  .wrap { max-width:var(--max); margin:0 auto; padding:0 24px; }
+
+  header.nav { position:sticky; top:0; z-index:10; background:rgba(10,10,11,0.78); backdrop-filter:blur(18px); border-bottom:1px solid var(--border); }
+  .nav-inner { max-width:var(--max); margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
+  .brand-mark { height:24px; width:auto; display:block; }
+  .brand-text { font-family:'Inter Tight',sans-serif; font-size:0.95rem; font-weight:700; letter-spacing:-0.01em; }
+  .brand-text span { color:var(--text-subtle); font-weight:500; }
+  .nav-back { color:var(--text-muted); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color .15s; }
+  .nav-back:hover { color:var(--text); }
+
+  main { padding:64px 0 96px; }
+  .doc-eyebrow { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--red); letter-spacing:0.16em; text-transform:uppercase; font-weight:500; display:inline-flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .doc-eyebrow::before { content:''; width:18px; height:1px; background:currentColor; opacity:0.6; }
+  h1 { font-family:'Inter Tight',sans-serif; font-size:clamp(2.25rem, 5vw, 3.25rem); font-weight:800; letter-spacing:-0.03em; line-height:1.05; margin-bottom:14px; }
+  .doc-meta { font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-subtle); letter-spacing:0.04em; margin-bottom:48px; }
+
+  article p, article li { color:var(--text-muted); font-size:1rem; line-height:1.7; }
+  article p + p { margin-top:14px; }
+  article strong { color:var(--text); font-weight:600; }
+  article a { color:var(--red); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+  article a:hover { text-decoration-thickness:2px; }
+
+  article h2 { font-family:'Inter Tight',sans-serif; font-size:1.375rem; font-weight:700; color:var(--text); letter-spacing:-0.015em; margin:48px 0 14px; scroll-margin-top:80px; }
+  article h3 { font-family:'Inter Tight',sans-serif; font-size:1.0625rem; font-weight:600; color:var(--text); letter-spacing:-0.01em; margin:24px 0 8px; }
+
+  article ul, article ol { padding-left:24px; margin:14px 0; }
+  article li { margin-bottom:8px; }
+  article li::marker { color:var(--text-subtle); }
+
+  .toc { background:var(--bg-elev); border:1px solid var(--border); border-radius:12px; padding:22px 26px; margin-bottom:48px; }
+  .toc h4 { font-family:'JetBrains Mono',monospace; font-size:0.72rem; font-weight:500; color:var(--text-subtle); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:14px; }
+  .toc ol { list-style:decimal; padding-left:22px; margin:0; }
+  .toc li { margin-bottom:6px; font-size:0.9375rem; }
+  .toc li::marker { color:var(--text-subtle); font-family:'JetBrains Mono',monospace; font-size:0.85rem; }
+  .toc a { color:var(--text-muted); text-decoration:none; transition:color .15s; }
+  .toc a:hover { color:var(--text); }
+
+  .callout { background:var(--red-soft); border:1px solid rgba(255,69,56,0.28); border-radius:8px; padding:14px 18px; margin:18px 0; font-size:0.95rem; }
+  .callout strong { color:var(--red); }
+
+  footer { border-top:1px solid var(--border); padding:32px 0 40px; margin-top:64px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-subtle); letter-spacing:0.02em; }
+  .foot-inner { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .foot-inner a { color:var(--text-subtle); text-decoration:none; }
+  .foot-inner a:hover { color:var(--text); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand" aria-label="Ludum Events home">
+      <img class="brand-mark" src="assets/logo-mark.png" alt="Ludum">
+      <span class="brand-text">Ludum<span> Events</span></span>
+    </a>
+    <a href="/" class="nav-back">← Back to home</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <span class="doc-eyebrow">Legal</span>
+    <h1>Terms of Service</h1>
+    <div class="doc-meta">Last updated: 6 May 2026 · Version 1.0</div>
+
+    <article>
+
+      <p>These terms govern your use of Ludum Events. By creating an account or otherwise using the service, you agree to them. If you don't agree, please don't use the service.</p>
+
+      <div class="callout"><strong>Plain-English summary:</strong> Ludum Events is free for the 2026 summer season. Use it for legitimate sports event communication. Don't break the law with it. We try hard to keep it running but make no perfect promises. We're not liable beyond what you've paid us (which during the free period is nothing). English law governs. Contact us at any time at <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>.</div>
+
+      <nav class="toc" aria-label="Contents">
+        <h4>Contents</h4>
+        <ol>
+          <li><a href="#about">About these terms</a></li>
+          <li><a href="#defs">Definitions</a></li>
+          <li><a href="#service">The service</a></li>
+          <li><a href="#pricing">Pricing during early access</a></li>
+          <li><a href="#account">Your account</a></li>
+          <li><a href="#use">Acceptable use</a></li>
+          <li><a href="#data">Your data and content</a></li>
+          <li><a href="#ip">Intellectual property</a></li>
+          <li><a href="#avail">Service availability and changes</a></li>
+          <li><a href="#liability">Liability</a></li>
+          <li><a href="#term">Termination</a></li>
+          <li><a href="#law">Governing law</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="about">1. About these terms</h2>
+      <p>These Terms of Service ("Terms") form a binding agreement between you and Ludum Ltd, a company registered in England and Wales ("Ludum", "we", "us", "our"). They govern your access to and use of the Ludum Events platform, located at <a href="https://ludumevents.com">ludumevents.com</a> and <a href="https://app.ludumevents.com">app.ludumevents.com</a> (together, the "Service").</p>
+      <p>Our <a href="privacy.html">Privacy Policy</a> forms part of these Terms.</p>
+
+      <h2 id="defs">2. Definitions</h2>
+      <ul>
+        <li><strong>Organiser</strong> — an individual or organisation that creates a Ludum Events account to run one or more events.</li>
+        <li><strong>Event</strong> — a sporting competition (e.g. a regatta) configured within the Service.</li>
+        <li><strong>Coach</strong> or <strong>Volunteer</strong> — an individual invited by an Organiser to participate in an Event via the Service.</li>
+        <li><strong>Customer Data</strong> — any data you upload to or generate within the Service, including event entries, messages, and replies.</li>
+        <li><strong>Early Access Period</strong> — the period from the Service's launch until 31 August 2026, during which the Service is provided free of charge.</li>
+      </ul>
+
+      <h2 id="service">3. The service</h2>
+      <p>Ludum Events provides software for organising and communicating during multi-club sports events, including (without limitation): entry data import, scoped messaging, dashboards, volunteer scheduling, and exports to support print and design workflows.</p>
+      <p>The Service is provided on an "as is" and "as available" basis. We are continually improving it, and features may be added, changed or removed.</p>
+
+      <h2 id="pricing">4. Pricing during early access</h2>
+      <p>During the Early Access Period (until 31 August 2026), the Service is provided <strong>free of charge</strong>. No payment information is required to create an account. We will not retroactively bill you for activity during this period.</p>
+      <p>From 1 September 2026 onwards, paid plans may be introduced. We will give all active Organisers <strong>at least 30 days' notice by email</strong> before any charges become applicable, and you will not be charged without explicit consent.</p>
+
+      <h2 id="account">5. Your account</h2>
+      <p>To use the Service as an Organiser, you must:</p>
+      <ul>
+        <li>Provide accurate registration details and keep them up to date.</li>
+        <li>Be at least 18 years old (or the age of legal majority in your jurisdiction).</li>
+        <li>Be authorised to act on behalf of any organisation you represent.</li>
+        <li>Keep your magic-link emails confidential and not share account access.</li>
+      </ul>
+      <p>You are responsible for all activity that occurs under your account. Notify us promptly if you suspect unauthorised access.</p>
+      <p>Coaches and volunteers access the Service via invitation links sent by an Organiser. They are not "users" in a contractual sense but are bound by the Acceptable Use rules below.</p>
+
+      <h2 id="use">6. Acceptable use</h2>
+      <p>You agree not to use the Service to:</p>
+      <ul>
+        <li>Send spam, harassment, or unlawful content.</li>
+        <li>Impersonate another person or entity.</li>
+        <li>Upload data you do not have lawful authority to process (e.g. importing contact data without a lawful basis under UK GDPR).</li>
+        <li>Reverse-engineer, decompile or attempt to extract source code, except to the extent permitted by mandatory law.</li>
+        <li>Use the Service for any sport, event, activity or jurisdiction where doing so would breach applicable law.</li>
+        <li>Probe, scan, or test the Service for vulnerabilities without prior written permission (responsible disclosure to <a href="mailto:adrian@ludum.com">adrian@ludum.com</a> is welcomed).</li>
+        <li>Place excessive load on the Service through automated requests or scraping.</li>
+      </ul>
+      <p>We may suspend or terminate access if you breach these rules.</p>
+
+      <h2 id="data">7. Your data and content</h2>
+      <p><strong>You own your data.</strong> Ludum claims no ownership over Customer Data. You grant us a worldwide, non-exclusive, royalty-free licence to host, store, transmit, display and process Customer Data solely as necessary to provide the Service to you.</p>
+      <p>You are responsible for the accuracy and lawfulness of Customer Data. Where Customer Data includes personal data, you confirm that you have a lawful basis under UK GDPR to upload it and to instruct us to process it as described in our <a href="privacy.html">Privacy Policy</a>.</p>
+      <p>You can export your data at any time via the platform. On termination, you have 30 days to export; after which Customer Data is deleted on the schedule set out in the Privacy Policy.</p>
+
+      <h2 id="ip">8. Intellectual property</h2>
+      <p>All intellectual property in the Service — including the software, design, "Ludum" and "Ludum Events" trademarks, and the operating-system framing — is owned by Ludum Ltd or its licensors. Nothing in these Terms transfers any of that intellectual property to you.</p>
+      <p>You may use the "Powered by Ludum Events" mark in event programmes and signage where the Service is in use, in good faith and without alteration.</p>
+
+      <h2 id="avail">9. Service availability and changes</h2>
+      <p>We aim for high availability but do not guarantee uninterrupted operation. Planned maintenance will be communicated where possible. The Service depends on third-party infrastructure (hosting, email delivery, push notifications) outside our direct control.</p>
+      <p>We may change features, interfaces, or capacity limits with reasonable notice. Material changes that reduce functionality you rely on will be notified by email at least 14 days in advance during the Early Access Period.</p>
+
+      <h2 id="liability">10. Liability</h2>
+      <p>Nothing in these Terms limits liability for death or personal injury caused by negligence, fraud, or any other liability that cannot be limited under applicable law.</p>
+      <p>Subject to that, our total aggregate liability arising out of or related to the Service in any 12-month period is limited to the greater of (a) the fees you have paid us in that period, or (b) £100.</p>
+      <p>We are not liable for indirect, consequential, or special losses, nor for loss of profits, business, goodwill, or data. The Service is a coordination tool — we are not responsible for the safe conduct of any sporting event itself, which remains the responsibility of the Organiser and any relevant governing body.</p>
+
+      <h2 id="term">11. Termination</h2>
+      <p><strong>By you:</strong> You may terminate your account at any time by emailing <a href="mailto:adrian@ludum.com">adrian@ludum.com</a> from the address on your account.</p>
+      <p><strong>By us:</strong> We may suspend or terminate access immediately if you materially breach these Terms (including the Acceptable Use rules above), or on 30 days' notice for any other reason.</p>
+      <p>Sections 7, 8, 10, 12 and 13 survive termination.</p>
+
+      <h2 id="law">12. Governing law</h2>
+      <p>These Terms are governed by the laws of England and Wales. Any dispute is subject to the exclusive jurisdiction of the English courts. If you are a consumer in another part of the United Kingdom or in the European Union, this does not deprive you of mandatory rights you have under your local law.</p>
+
+      <h2 id="contact">13. Contact</h2>
+      <p>For any question about these Terms — including notices, consent withdrawals, or termination requests — email <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>.</p>
+
+    </article>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <span>© <span id="yr">2026</span> Ludum Ltd. All rights reserved.</span>
+      <span><a href="/">ludumevents.com</a> · <a href="privacy.html">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

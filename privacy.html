@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Ludum Events</title>
+<meta name="description" content="How Ludum Events collects, uses, and protects personal data, in plain English.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0A0A0B">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:           #0A0A0B;
+    --bg-elev:      #131316;
+    --bg-elev-2:    #1A1A1F;
+    --border:       rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.16);
+    --text:         #F5F2ED;
+    --text-muted:   rgba(245,242,237,0.72);
+    --text-subtle:  rgba(245,242,237,0.42);
+    --red:          #FF4538;
+    --red-soft:     rgba(255,69,56,0.14);
+    --max:          760px;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; font-size:16px; }
+  ::selection { background:var(--red); color:#fff; }
+  :focus-visible { outline:2px solid var(--red); outline-offset:3px; border-radius:4px; }
+
+  .wrap { max-width:var(--max); margin:0 auto; padding:0 24px; }
+
+  /* Nav */
+  header.nav { position:sticky; top:0; z-index:10; background:rgba(10,10,11,0.78); backdrop-filter:blur(18px); border-bottom:1px solid var(--border); }
+  .nav-inner { max-width:var(--max); margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .brand { display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
+  .brand-mark { height:24px; width:auto; display:block; }
+  .brand-text { font-family:'Inter Tight',sans-serif; font-size:0.95rem; font-weight:700; letter-spacing:-0.01em; }
+  .brand-text span { color:var(--text-subtle); font-weight:500; }
+  .nav-back { color:var(--text-muted); text-decoration:none; font-size:0.875rem; font-weight:500; transition:color .15s; }
+  .nav-back:hover { color:var(--text); }
+
+  /* Article */
+  main { padding:64px 0 96px; }
+  .doc-eyebrow {
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+    color:var(--red); letter-spacing:0.16em; text-transform:uppercase; font-weight:500;
+    display:inline-flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .doc-eyebrow::before { content:''; width:18px; height:1px; background:currentColor; opacity:0.6; }
+  h1 {
+    font-family:'Inter Tight',sans-serif;
+    font-size:clamp(2.25rem, 5vw, 3.25rem);
+    font-weight:800;
+    letter-spacing:-0.03em;
+    line-height:1.05;
+    margin-bottom:14px;
+  }
+  .doc-meta { font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-subtle); letter-spacing:0.04em; margin-bottom:48px; }
+
+  article p, article li { color:var(--text-muted); font-size:1rem; line-height:1.7; }
+  article p + p { margin-top:14px; }
+  article strong { color:var(--text); font-weight:600; }
+  article a { color:var(--red); text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
+  article a:hover { text-decoration-thickness:2px; }
+
+  article h2 {
+    font-family:'Inter Tight',sans-serif;
+    font-size:1.375rem;
+    font-weight:700;
+    color:var(--text);
+    letter-spacing:-0.015em;
+    margin:48px 0 14px;
+    scroll-margin-top:80px;
+  }
+  article h3 {
+    font-family:'Inter Tight',sans-serif;
+    font-size:1.0625rem;
+    font-weight:600;
+    color:var(--text);
+    letter-spacing:-0.01em;
+    margin:24px 0 8px;
+  }
+
+  article ul, article ol { padding-left:24px; margin:14px 0; }
+  article li { margin-bottom:8px; }
+  article li::marker { color:var(--text-subtle); }
+
+  /* TOC */
+  .toc {
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:22px 26px;
+    margin-bottom:48px;
+  }
+  .toc h4 {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    font-weight:500;
+    color:var(--text-subtle);
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .toc ol { list-style:decimal; padding-left:22px; margin:0; }
+  .toc li { margin-bottom:6px; font-size:0.9375rem; }
+  .toc li::marker { color:var(--text-subtle); font-family:'JetBrains Mono',monospace; font-size:0.85rem; }
+  .toc a { color:var(--text-muted); text-decoration:none; transition:color .15s; }
+  .toc a:hover { color:var(--text); }
+
+  table {
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-size:0.9rem;
+  }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--border); color:var(--text-muted); }
+  th { font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-subtle); font-weight:500; }
+  td strong { color:var(--text); font-weight:600; }
+
+  /* Footer */
+  footer { border-top:1px solid var(--border); padding:32px 0 40px; margin-top:64px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--text-subtle); letter-spacing:0.02em; }
+  .foot-inner { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  .foot-inner a { color:var(--text-subtle); text-decoration:none; }
+  .foot-inner a:hover { color:var(--text); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand" aria-label="Ludum Events home">
+      <img class="brand-mark" src="assets/logo-mark.png" alt="Ludum">
+      <span class="brand-text">Ludum<span> Events</span></span>
+    </a>
+    <a href="/" class="nav-back">← Back to home</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <span class="doc-eyebrow">Legal</span>
+    <h1>Privacy Policy</h1>
+    <div class="doc-meta">Last updated: 6 May 2026 · Version 1.0</div>
+
+    <article>
+
+      <p>This policy explains what personal data Ludum Events collects, why we collect it, how we use it, and what rights you have. We've tried to write it in plain English. If anything is unclear, email us at <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>.</p>
+
+      <nav class="toc" aria-label="Contents">
+        <h4>Contents</h4>
+        <ol>
+          <li><a href="#who">Who we are</a></li>
+          <li><a href="#what">What we collect</a></li>
+          <li><a href="#why">Why we collect it</a></li>
+          <li><a href="#basis">Lawful basis under UK GDPR</a></li>
+          <li><a href="#share">Who we share it with</a></li>
+          <li><a href="#transfers">International transfers</a></li>
+          <li><a href="#retention">How long we keep it</a></li>
+          <li><a href="#rights">Your rights</a></li>
+          <li><a href="#cookies">Cookies</a></li>
+          <li><a href="#security">Security</a></li>
+          <li><a href="#changes">Changes to this policy</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="who">1. Who we are</h2>
+      <p>Ludum Events is a service provided by Ludum Ltd, a company registered in England and Wales, contactable at <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>. For the purposes of UK GDPR and the EU General Data Protection Regulation, Ludum Ltd is the <strong>data controller</strong> for the personal data we hold about organisers and visitors to <a href="https://ludumevents.com">ludumevents.com</a>.</p>
+      <p>For coach, volunteer and competitor data uploaded by an event organiser into the Ludum Events platform, the organiser is the data controller and Ludum Ltd is a <strong>data processor</strong> acting on the organiser's instructions under a Data Processing Agreement (the standard DPA forms part of our <a href="terms.html">Terms of Service</a>).</p>
+
+      <h2 id="what">2. What we collect</h2>
+
+      <h3>From organisers (account holders)</h3>
+      <ul>
+        <li>Name, email address, and the name of the regatta or event you organise.</li>
+        <li>Authentication metadata (login timestamps, IP address of last sign-in).</li>
+        <li>Branding data you upload (logo, colour palette, sender name and email).</li>
+        <li>Any messages you compose and send through the platform.</li>
+      </ul>
+
+      <h3>From coaches and volunteers (invited users)</h3>
+      <ul>
+        <li>Name, email address, club affiliation(s), and (for coaches) a coaching licence number — uploaded by the organiser from the British Rowing BROE2 entry system or a CSV.</li>
+        <li>Replies you send to organiser broadcasts, plus read-receipt timestamps.</li>
+        <li>Browser push-notification subscription details, if you opt in.</li>
+        <li>For volunteers: shift assignments and contact details collected at sign-up.</li>
+      </ul>
+
+      <h3>From competitors</h3>
+      <ul>
+        <li>Name, age category, club, and crew assignment, imported from BROE2 by the organiser. Competitors do not have user accounts and we do not collect data from them directly.</li>
+      </ul>
+
+      <h3>From visitors to ludumevents.com</h3>
+      <ul>
+        <li>Standard server logs (IP address, user agent, requested URL, timestamp) retained for 30 days for security and debugging.</li>
+        <li>We do not run third-party analytics, advertising trackers, or session-replay tools on the marketing site.</li>
+      </ul>
+
+      <h2 id="why">3. Why we collect it</h2>
+      <p>We use personal data to:</p>
+      <ul>
+        <li>Provide the Ludum Events service — sending and receiving communications between organisers, coaches and volunteers; populating dashboards; generating event collateral.</li>
+        <li>Authenticate users via magic-link email (no passwords are stored).</li>
+        <li>Send transactional emails (account confirmations, invitations, broadcast deliveries).</li>
+        <li>Respond to support requests sent to us.</li>
+        <li>Detect and investigate abuse, fraud, or technical faults.</li>
+        <li>Comply with our legal obligations.</li>
+      </ul>
+      <p>We do not use personal data for advertising, profiling, or sale to third parties. We do not train AI models on customer data.</p>
+
+      <h2 id="basis">4. Lawful basis under UK GDPR</h2>
+      <table>
+        <thead><tr><th>Activity</th><th>Lawful basis</th></tr></thead>
+        <tbody>
+          <tr><td>Providing the service to organisers</td><td><strong>Contract</strong> (Article 6(1)(b))</td></tr>
+          <tr><td>Sending invites and broadcasts to coaches and volunteers</td><td><strong>Legitimate interest</strong> (Article 6(1)(f)) — necessary for the safe operation of a sporting event</td></tr>
+          <tr><td>Push notifications to coaches</td><td><strong>Consent</strong> (Article 6(1)(a)) — coaches opt in via browser permission</td></tr>
+          <tr><td>Security logs, fraud prevention</td><td><strong>Legitimate interest</strong> (Article 6(1)(f))</td></tr>
+          <tr><td>Tax and accounting records</td><td><strong>Legal obligation</strong> (Article 6(1)(c))</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="share">5. Who we share it with</h2>
+      <p>We share personal data only with the service providers we use to operate Ludum Events. Each is bound by a Data Processing Agreement that restricts what they can do with the data:</p>
+      <table>
+        <thead><tr><th>Provider</th><th>Purpose</th><th>Region</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Supabase</strong></td><td>Database, authentication</td><td>EU (Frankfurt)</td></tr>
+          <tr><td><strong>Vercel</strong></td><td>Application hosting (app.ludumevents.com)</td><td>UK / EU edge</td></tr>
+          <tr><td><strong>DigitalOcean</strong></td><td>Marketing site hosting (ludumevents.com)</td><td>UK (London)</td></tr>
+          <tr><td><strong>SendGrid</strong></td><td>Transactional email delivery</td><td>USA</td></tr>
+          <tr><td><strong>Cloudflare</strong></td><td>Edge network and DDoS protection</td><td>Global</td></tr>
+        </tbody>
+      </table>
+      <p>We do not sell personal data. We do not share data with advertising networks. We may disclose data if compelled by a legally valid request from a UK or EU authority.</p>
+
+      <h2 id="transfers">6. International transfers</h2>
+      <p>Where personal data is transferred outside the UK or EEA (currently to SendGrid in the United States), the transfer is protected by the UK International Data Transfer Addendum to the EU Standard Contractual Clauses, or the equivalent EU SCCs.</p>
+
+      <h2 id="retention">7. How long we keep it</h2>
+      <ul>
+        <li><strong>Organiser accounts:</strong> for as long as the account is active, plus 30 days after deletion.</li>
+        <li><strong>Event data (crews, competitors, messages):</strong> for the duration of the event plus 12 months, then permanently deleted unless the organiser exports or extends.</li>
+        <li><strong>Coach and volunteer accounts:</strong> until the relevant event ends, then converted to anonymised statistics; personal identifiers are removed within 30 days.</li>
+        <li><strong>Server logs:</strong> 30 days.</li>
+        <li><strong>Financial records:</strong> 7 years, as required by HMRC.</li>
+      </ul>
+
+      <h2 id="rights">8. Your rights</h2>
+      <p>Under UK and EU GDPR you have the right to:</p>
+      <ul>
+        <li><strong>Access</strong> the personal data we hold about you.</li>
+        <li><strong>Rectify</strong> inaccurate data.</li>
+        <li><strong>Erase</strong> data we hold (subject to legal retention obligations).</li>
+        <li><strong>Restrict</strong> or <strong>object to</strong> processing.</li>
+        <li><strong>Portability</strong> — receive a machine-readable copy of your data.</li>
+        <li><strong>Withdraw consent</strong> where processing is based on consent.</li>
+        <li><strong>Lodge a complaint</strong> with the UK Information Commissioner's Office (<a href="https://ico.org.uk">ico.org.uk</a>) or your local supervisory authority.</li>
+      </ul>
+      <p>To exercise any of these rights, email <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>. We aim to respond within 30 days.</p>
+      <p>If you are a coach or volunteer whose data was uploaded by an event organiser, please contact that organiser first — they are the data controller for that data. If you cannot reach them, we will help.</p>
+
+      <h2 id="cookies">9. Cookies</h2>
+      <p>The marketing site (ludumevents.com) sets <strong>no cookies</strong>. Google Fonts is loaded directly from <code>fonts.googleapis.com</code> without cookies, in line with their privacy-friendly delivery option.</p>
+      <p>The application (app.ludumevents.com) sets:</p>
+      <ul>
+        <li>A <strong>session cookie</strong> issued by Supabase, used to keep you signed in. Strictly necessary; not used for tracking.</li>
+        <li>A <strong>theme preference</strong> in localStorage, where applicable.</li>
+      </ul>
+      <p>No third-party analytics or advertising cookies are set on either domain.</p>
+
+      <h2 id="security">10. Security</h2>
+      <p>We use industry-standard security practices including:</p>
+      <ul>
+        <li>HTTPS for all connections, with HSTS enforced.</li>
+        <li>Database encryption at rest (Supabase Postgres with AES-256).</li>
+        <li>Row-level security policies on all tenant data.</li>
+        <li>Magic-link authentication (no password storage; no password reuse risk).</li>
+        <li>Audit logs of every data import, send, and edit.</li>
+      </ul>
+      <p>If you become aware of a security issue, please email <a href="mailto:adrian@ludum.com">adrian@ludum.com</a> with the subject line "Security" and we will respond within one business day.</p>
+
+      <h2 id="changes">11. Changes to this policy</h2>
+      <p>We may update this policy as the service evolves. Material changes will be notified to organisers by email at least 14 days before they take effect, and the "Last updated" date at the top of this page will change. Older versions are available on request.</p>
+
+      <h2 id="contact">12. Contact</h2>
+      <p>Questions, requests, or anything else: <a href="mailto:adrian@ludum.com">adrian@ludum.com</a>.</p>
+      <p>Postal address available on request to the email above.</p>
+
+    </article>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <span>© <span id="yr">2026</span> Ludum Ltd. All rights reserved.</span>
+      <span><a href="/">ludumevents.com</a> · <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>
